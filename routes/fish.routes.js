@@ -7,7 +7,7 @@ import {Router} from "express"
 const router_fish = Router()
 
 router_fish.route("/user/fish")
-        .getFish(getFish)
+        .get(getFish)
 
 
 export default fish_router;
