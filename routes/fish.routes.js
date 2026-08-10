@@ -10,4 +10,4 @@ router_fish.route("/user/fish")
         .get(getFish)
 
 
-export default fish_router;
+export default router_fish;
