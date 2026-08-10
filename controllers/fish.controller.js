@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import pool from '../config/db.config.js'
 
 
 async function getFish(req, res){

@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import dbConnect from './config/db.config.js';
+import pool, { dbConnect } from './config/db.config.js';
 import router from './routes/fish.routes.js';
 import router_fish from './routes/fish.routes.js';
 import cookieParser from 'cookie-parser';
