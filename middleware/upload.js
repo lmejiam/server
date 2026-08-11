@@ -10,7 +10,7 @@ const TAGS_DIR = path.join(os.homedir(),  process.env.TAGS_UPLOAD_PATH);
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, UPLOAD_DIR);
+        cb(null, TAGS_DIR);
     },
     filename: (req, file, cb) => {
         //const uniqueName = `${Date.now()}-${file.originalname}`;
@@ -31,4 +31,4 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 
-module.exports = upload;
+export default upload;
