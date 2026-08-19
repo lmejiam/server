@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 
 // optional: restrict file types server-side too (don't just trust the frontend)
 const fileFilter = (req, file, cb) => {
-    const allowedExtensions = [".txt", ".ini", ".config"];
+    const allowedExtensions = [".txt", ".ini", ".config", ".csv"];
     const ext = path.extname(file.originalname).toLowerCase();
     if (allowedExtensions.includes(ext)) {
         cb(null, true);
