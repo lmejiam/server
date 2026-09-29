@@ -7,6 +7,7 @@ import router_fish from './routes/fish.routes.js';
 import router_upload from './routes/upload.routes.js';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser'
+import router_status from './routes/status.routes.js';
 
 const app = express();
 
@@ -19,7 +20,7 @@ app.use(express.json(), cors({credentials: true,origin: 'http://localhost:5173' 
 
 dotenv.config();
 
-app.use("/api", router, router_fish, router_upload)
+app.use("/api", router, router_fish, router_upload, router_status)
 
 const PORT = process.env.PORT;
 dbConnect();
