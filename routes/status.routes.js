@@ -4,9 +4,9 @@ import{
 
 import {Router} from "express"
 
-const router_fish = Router()
+const router_status = Router()
 
-router_fish.route("/user/status")
+router_status.route("/user/status")
         .get(getStatus)
 
 
