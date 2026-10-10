@@ -32,11 +32,25 @@ async function getCounts(req, res){
     }  catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to fetch counts' });
+    }
+
 }
 
+
+
+async function updateActiveTagFile(tagfilename) {
+    const result = await pool.query(
+        `UPDATE status.systemstatus
+            SET activetagfile = $1
+        WHERE id = 1
+        RETURNING *;`,
+        [tagfilename]
+    );
+    return result.rows[0];
 }
 
 export {
     getStatus,
-    getCounts
+    getCounts,
+    updateActiveTagFile
 }
