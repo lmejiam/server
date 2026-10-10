@@ -1,4 +1,4 @@
-import { updateActiveTagFile } from "./status.controller";
+import { updateActiveTagFile } from "./status.controller.js";
 
 
 async function handleUpload(req, res) {
