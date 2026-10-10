@@ -36,8 +36,6 @@ async function getCounts(req, res){
 
 }
 
-
-
 async function updateActiveTagFile(tagfilename) {
     const result = await pool.query(
         `UPDATE status.systemstatus
