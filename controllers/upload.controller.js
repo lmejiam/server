@@ -9,12 +9,12 @@ async function handleUpload(req, res) {
 
         const uploadedFiles = req.files.map(file => ({
         originalName: file.originalname,
-        savedAs: "activetagfile.csv", //file.filename
+        savedAs: file.filename, //file.filename
         size: file.size,
         path: file.path,
         }));
 
-        const row = await updateActiveTagFile(req.files[0].filename);
+        const row = await updateActiveTagFile(req.files[0].originalName);
         if (!row) {
         return res.status(404).json({ error: 'System status row not found' });
         }

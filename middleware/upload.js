@@ -14,11 +14,10 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         //const uniqueName = `${Date.now()}-${file.originalname}`;
-        cb(null, 'activetagfile.csv');
+        cb(null, "activetagfile.csv");
     },
 });
 
-// optional: restrict file types server-side too (don't just trust the frontend)
 const fileFilter = (req, file, cb) => {
     const allowedExtensions = [".txt", ".ini", ".config", ".csv"];
     const ext = path.extname(file.originalname).toLowerCase();
@@ -28,7 +27,7 @@ const fileFilter = (req, file, cb) => {
         cb(new Error("Unsupported file type"), false);
     }
 };
-//test
+
 const upload = multer({ storage, fileFilter });
 
 export default upload;
