@@ -14,7 +14,7 @@ async function handleUpload(req, res) {
         path: file.path,
         }));
 
-        const row = await updateActiveTagFile(req.files[0].originalName);
+        const row = await updateActiveTagFile(req.files[0].originalname);
         if (!row) {
         return res.status(404).json({ error: 'System status row not found' });
         }
