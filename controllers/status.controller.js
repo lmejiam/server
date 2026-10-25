@@ -1,4 +1,6 @@
 import jwt from 'jsonwebtoken'
+import { execFile } from 'child_process'
+import { isIP } from 'net'
 import pool from '../config/db.config.js'
 
 
@@ -47,8 +49,22 @@ async function updateActiveTagFile(tagfilename) {
     return result.rows[0];
 }
 
+function getRemoteConnectionStatus(req, res){
+    const ip = process.env.REMOTE_IP;
+    if (!isIP(ip)) {
+        console.error('REMOTE_IP is missing or invalid in .env')
+        return res.json({ remoteConnectionStatus : "NOT FOUND"});
+    }
+
+    const countFlag = process.platform === 'win32' ? '-n' : '-c';
+    execFile('ping', [countFlag, '1', ip], { timeout: 1000 }, (error) => {
+        res.json({ remoteConnectionStatus : error ? "NOT FOUND" : "FOUND"});
+    });
+}
+
 export {
     getStatus,
+    getRemoteConnectionStatus,
     getCounts,
     updateActiveTagFile
 }

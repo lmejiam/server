@@ -1,6 +1,7 @@
 import{
-    getCounts,
-    getStatus
+        getCounts,
+        getStatus,
+        getRemoteConnectionStatus
 }from "../controllers/status.controller.js"
 
 import {Router} from "express"
@@ -12,5 +13,8 @@ router_status.route("/user/status")
 
 router_status.route("/user/counts")
         .get(getCounts)
+
+router_status.route("/user/ping")
+        .get(getRemoteConnectionStatus)
 
 export default router_status;
