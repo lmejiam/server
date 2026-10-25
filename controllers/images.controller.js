@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 
 dotenv.config();
 
-const IMAGES_DIR = path.join(os.homedir(), process.env.IMAGES_PATH || 'images');
+const IMAGES_DIR = path.resolve(os.homedir(), process.env.IMAGES_PATH || 'images');
 const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
 
 async function getImages(req, res){
