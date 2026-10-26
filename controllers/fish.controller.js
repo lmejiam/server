@@ -17,7 +17,12 @@ async function getFish(req, res){
 
 function toCsvValue(value){
     if (value === null || value === undefined) return '';
-    if (value instanceof Date) return value.toISOString();
+    if (value instanceof Date){
+        const year  = value.getFullYear();
+        const month = String(value.getMonth() + 1).padStart(2, '0');
+        const day   = String(value.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`
+    };
 
     const text = String(value);
     if (/[";\n\r]/.test(text)) {
@@ -29,7 +34,7 @@ function toCsvValue(value){
 async function buildFishCsv(){
 
     const result = await pool.query(`
-        SELECT *
+        SELECT date, whooshh_id AS FISH, tag_num AS TAG, site, priority, prioritygate AS AssignedGate, outputlane AS Fish_Outlet, weight, length, circumference, condition, maturity, filename1, filename2, file_id_aris AS FILE_ID
         FROM sorting.fish
         WHERE "timestamp"::date = CURRENT_DATE;
     `);
