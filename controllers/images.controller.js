@@ -17,7 +17,7 @@ async function getImages(req, res){
                 .filter(name => IMAGE_EXTENSIONS.includes(path.extname(name).toLowerCase()))
                 .map(async name => {
                     const info = await stat(path.join(IMAGES_DIR, name));
-                    return { name, url: `/images/${encodeURIComponent(name)}`, modified: info.mtime };
+                    return { name, url: `/api/images/${encodeURIComponent(name)}`, modified: info.mtime };
                 })
         );
 

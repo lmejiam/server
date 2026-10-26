@@ -23,7 +23,7 @@ app.use(express.json(), cors({credentials: true,origin: 'http://localhost:5173' 
 
 dotenv.config();
 
-app.use('/images', express.static(IMAGES_DIR));
+app.use('/api/images', express.static(IMAGES_DIR));
 app.use("/api", router, router_fish, router_upload, router_status, router_images)
 
 const PORT = process.env.PORT;
