@@ -1,4 +1,4 @@
-import { readdir, stat } from 'fs/promises'
+import { readdir } from 'fs/promises'
 import os from 'os'
 import path from 'path'
 import dotenv from 'dotenv'
@@ -7,22 +7,30 @@ dotenv.config();
 
 const IMAGES_DIR = path.resolve(os.homedir(), process.env.IMAGES_PATH || 'images');
 const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+const DEFAULT_LIMIT = 50;
+const MAX_LIMIT = 200;
 
 async function getImages(req, res){
     try{
-        const files = await readdir(IMAGES_DIR);
+        const offset = Math.max(0, parseInt(req.query.offset) || 0);
+        const limit = Math.min(MAX_LIMIT, Math.max(1, parseInt(req.query.limit) || DEFAULT_LIMIT));
 
-        const images = await Promise.all(
-            files
-                .filter(name => IMAGE_EXTENSIONS.includes(path.extname(name).toLowerCase()))
-                .map(async name => {
-                    const info = await stat(path.join(IMAGES_DIR, name));
-                    return { name, url: `/api/images/${encodeURIComponent(name)}`, modified: info.mtime };
-                })
-        );
+        // File names start with the date and time (20260917_192111_...), so sorting
+        // by name newest-first avoids a slow stat() per file on the Samba share
+        const names = (await readdir(IMAGES_DIR))
+            .filter(name => IMAGE_EXTENSIONS.includes(path.extname(name).toLowerCase()))
+            .sort()
+            .reverse();
 
-        images.sort((a, b) => b.modified - a.modified);
-        res.json(images);
+        const images = names
+            .slice(offset, offset + limit)
+            .map(name => ({ name, url: `/api/images/${encodeURIComponent(name)}` }));
+
+        res.json({
+            images,
+            total: names.length,
+            hasMore: offset + limit < names.length
+        });
 
     } catch(error){
         console.error(error);
