@@ -17,12 +17,7 @@ async function getFish(req, res){
 
 function toCsvValue(value){
     if (value === null || value === undefined) return '';
-    if (value instanceof Date){
-        const year  = value.getFullYear();
-        const month = String(value.getMonth() + 1).padStart(2, '0');
-        const day   = String(value.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`
-    };
+    if (value instanceof Date) return value.toISOString();
 
     const text = String(value);
     if (/[";\n\r]/.test(text)) {
@@ -68,9 +63,10 @@ async function checkDailyExport(){
                 (SELECT COUNT(*)::int FROM sorting.fish WHERE whooshh_id > $1) AS new_count,
                 (SELECT MAX(whooshh_id) FROM sorting.fish WHERE whooshh_id > $1) AS max_id,
                 (SELECT sorting FROM status.systemstatus WHERE id = 1) AS sorting,
-                (SELECT site_name FROM status.systemstatus WHERE id = 1) AS site
+                (SELECT site_name FROM status.systemstatus WHERE id = 1) AS site,
+                to_char(CURRENT_DATE, 'YYYY-MM-DD') AS today
         `, [lastExportedID]);
-        const { new_count, max_id, sorting, site } = result.rows[0];
+        const { new_count, max_id, sorting, site, today } = result.rows[0];
 
         const batchReady = new_count >= 10;
         const sortingStopped = Number(sorting) === 0 && new_count > 0;
@@ -79,9 +75,8 @@ async function checkDailyExport(){
             const dir = process.env.CSV_EXPORT_DIR;
             await mkdir(dir, { recursive: true });
 
-            const stamp = new Date().toISOString().replace(/[:.]/g, '-');
             const safeSite = String(site || 'unknown').replace(/[^a-zA-Z0-9_-]/g, '_')
-            const filePath = path.join(dir, `${safeSite}_${stamp}.csv`);
+            const filePath = path.join(dir, `${safeSite}_${today}.csv`);
             await writeFile(filePath, await buildFishCsv());
 
             lastExportedID = max_id;
