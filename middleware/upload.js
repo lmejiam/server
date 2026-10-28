@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-    const allowedExtensions = [".txt", ".ini", ".config", ".csv"];
+    const allowedExtensions = [".csv"];
     const ext = path.extname(file.originalname).toLowerCase();
     if (allowedExtensions.includes(ext)) {
         cb(null, true);
