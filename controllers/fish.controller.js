@@ -29,7 +29,7 @@ function toCsvValue(value){
 async function buildFishCsv(){
 
     const result = await pool.query(`
-        SELECT date, whooshh_id AS FISH_ID, tag_num AS TAG, site, priority, prioritygate AS Assigned_Gate, outputlane AS Fish_Outlet, outlet_label, weight, length, circumference, condition, maturity, filename1, filename2, file_id_aris AS FILE_ID
+        SELECT date, whooshh_id AS FISH_ID, tag_num AS TAG, site, outlet_label, priority, prioritygate AS Assigned_Gate, outputlane AS Fish_Outlet,  weight, length, circumference, condition, maturity, outputlanereason as sortinfo, filename1, filename2, file_id_aris AS FILE_ID
         FROM sorting.fish
         WHERE "timestamp"::date = CURRENT_DATE;
     `);
